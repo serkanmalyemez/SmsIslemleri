@@ -1,0 +1,94 @@
+﻿@model WebUI.Models.SmsSendViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="col"><h5><input id="Sid" class="form-control-plaintext" /></h5></div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">NetGSM SOAP Kullanarak SMS Gönderme</h5>
+            <p class="card-text">Api hizmeti kullanıyorsanız bu özellikten yararlanabilirsiniz.</p>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" type="text" class="form-control" placeholder="Mesajınısı Yazınız" rows="3"></textarea>
+                        <small class="form-text text-muted">Göndermek istediğiniz mesajı yazabilirsiniz.</small>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="phoneNumber">Telefon Numarası</label>
+                        <input id="phone" type="text" class="form-control" placeholder="05xxxxxxxxx">
+                        <small class="form-text text-muted">Telefon numarasını başında 0 olacak şekilde 11 karakter olacak şekilde yazınız.</small>
+                    </div>
+                </div>
+                <hr />
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-primary" onclick="soap()">SOAP</button>
+                </div>
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-warning" onclick="xmlPost()">Xml Post</button>
+                </div>
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-dark" onclick="htmlGet()">Html Get</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    document.getElementById("Sid").value = "Bulkid: ";
+
+    function soap() {
+        var phone = $("#phone").val();
+        var message = $("#message").val();
+
+        tel = phone;
+        msg = message;
+
+        $.get("/Sms/SendSOAP", { tel: tel, msg: msg })
+            .done(function (soap) {
+                console.log(soap);
+                $('#Sid').val("Bulkid: " + soap.bulkid);
+            })
+    }
+
+    function xmlPost() {
+        var phone = $("#phone").val();
+        var message = $("#message").val();
+
+        tel = phone;
+        msg = message;
+
+        $.get("/Sms/SendXmlPost", { tel: tel, msg: msg })
+            .done(function (soap) {
+                console.log(soap);
+                $('#Sid').val("Bulkid: " + soap.bulkid);
+            })
+    }
+
+    function htmlGet() {
+        var phone = $("#phone").val();
+        var message = $("#message").val();
+
+        tel = phone;
+        msg = message;
+
+        $.get("/Sms/SendHtmlGet", { tel: tel, msg: msg })
+            .done(function (soap) {
+                console.log(soap);
+                $('#Sid').val("Bulkid: " + soap.bulkid);
+            })
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
